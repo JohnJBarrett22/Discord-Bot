@@ -1,9 +1,8 @@
 const {token, prefix} = require("./config");
 const {Client, Collection } = require("discord.js")
 
-const Client = new Client({
+const client = new Client({
     disableEverone: true,
-    shardCount: "auto",
     disabledEvents: ["TYPING_START"]
 });
 

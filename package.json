@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JohnJBarrett22/Discord-Bot#readme",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js"
+    "discord.js": "github:discordjs/discord.js",
+    "vultrex.db": "github:vultrex/vultrexdb"
   }
 }

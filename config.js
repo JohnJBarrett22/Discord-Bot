@@ -1,3 +1,3 @@
 exports.token = "";
 exports.owners = [];
-exports.prefix = ",";
+exports.prefix = "!";

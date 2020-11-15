@@ -1,7 +1,14 @@
-const { MessageFlags } = require("discord.js");
 const {owners} = require("../config");
+const {VultrexDB} = require("vultrex.db");
+const messageData = new VultrexDB({
+    name: "messages"
+});
 
 module.exports = (client, message) => {
+    let messages = messageData.get(`${message.guild.id}-${message.author.id}`, 0);
+    messages++;
+    messageData.set(`${message.guild.id}-${message.author.id}`, messages);
+
     if(message.author.bot) return;
 
     const args = message.content.split(/ +/g);
@@ -22,7 +29,7 @@ module.exports = (client, message) => {
     if(cmd.requirements.clientPerms && !message.guild.me.permissions.has(cmd.requirements.userPerms))
         return message.reply(`I am missing the following permissions: ${missingPerms(message.guild.me, cmd.requirements.clientPerms)}`);
 
-    cmd.run(clients, message, args);
+    cmd.run(client, message, args);
 
 }
 
