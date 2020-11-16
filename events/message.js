@@ -1,19 +1,19 @@
 const {owners} = require("../config");
-const {VultrexDB} = require("vultrex.db");
-const messageData = new VultrexDB({
-    name: "messages"
-});
+// const {VultrexDB} = require("vultrex.db");
+// const messageData = new VultrexDB({
+//     name: "messages"
+// });
 
 module.exports = (client, message) => {
-    let messages = messageData.get(`${message.guild.id}-${message.author.id}`, 0);
-    messages++;
-    messageData.set(`${message.guild.id}-${message.author.id}`, messages);
+    // let messages = messageData.get(`${message.guild.id}-${message.author.id}`, 0);
+    // messages++;
+    // messageData.set(`${message.guild.id}-${message.author.id}`, messages);
 
     if(message.author.bot) return;
 
     const args = message.content.split(/ +/g);
     const command = args.shift().slice(client.prefix.length).toLowerCase();
-    const cmd = clients.commands.get(command);
+    const cmd = client.commands.get(command);
 
     if(!message.content.toLowerCase().startsWith(client.prefix)) return;
 
@@ -26,8 +26,21 @@ module.exports = (client, message) => {
     if(cmd.requirements.userPerms && !message.member.permissions.has(cmd.requirements.userPerms))
         return message.reply(`You must have the following permissions: ${missingPerms(message.member, cmd.requirements.userPerms)}`);
 
-    if(cmd.requirements.clientPerms && !message.guild.me.permissions.has(cmd.requirements.userPerms))
+    if(cmd.requirements.clientPerms && !message.guild.me.permissions.has(cmd.requirements.clientPerms))
         return message.reply(`I am missing the following permissions: ${missingPerms(message.guild.me, cmd.requirements.clientPerms)}`);
+
+    if(cmd.limits) {
+        const current = client.limits.get(`${command}-${message.author.id}`);
+
+        if(!current) client.limits.set(`${command}-${message.author.id}`, 1);
+        else {
+            if(current >= cmd.limits.rateLimit) return;
+            client.limits.set(`${command}-${message.author.id}`, current + 1);
+        }
+        setTimeout(() => {
+            client.limits.delete(`${command}-${message.author.id}`)
+        }, cmd.limits.cooldown);
+    }
 
     cmd.run(client, message, args);
 

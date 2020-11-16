@@ -12,3 +12,8 @@ module.exports.run = (client, message, args) => {
      clientPerms: [],
      ownerOnly: false,
  }
+
+ module.exports.limits = {
+     rateLimit: 2,
+     cooldown: 1e4
+ }

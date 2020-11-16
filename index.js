@@ -8,6 +8,7 @@ const client = new Client({
 
 client.prefix = prefix;
 client.commands = new Collection();
+client.limits = new Map();
 
 const commands = require("./structures/command");
 commands.run(client);
