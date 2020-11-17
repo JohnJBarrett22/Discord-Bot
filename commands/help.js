@@ -13,7 +13,7 @@ module.exports.run = (client, message, args) => {
 
     const embed = new MessageEmbed()
         .setAuthor(`Help | ${client.user.username}`, client.user.displayAvatarURL())
-        .setDescription(clients.commands.map(cmd => cmd.help.name).join(", "))
+        .setDescription(client.commands.map(cmd => cmd.help.name).join(", "))
         .setColor(0xffffff)
 
     message.channel.send(embed);
