@@ -9,7 +9,7 @@ module.exports = (client, message) => {
     // messages++;
     // messageData.set(`${message.guild.id}-${message.author.id}`, messages);
 
-    if(message.author.bot) return;
+    if(!message.guild || message.author.bot) return;
 
     const args = message.content.split(/ +/g);
     const command = args.shift().slice(client.prefix.length).toLowerCase();
